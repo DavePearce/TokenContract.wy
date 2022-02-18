@@ -12,6 +12,8 @@ public type Contract is {
 
 public method transfer(&Contract self, address sender, address to, uint256 value)
 requires self->balances[sender] >= value
-ensures self->balances[sender] == old(self->balances[sender]) - value:
+ensures self->balances[sender] == old(self->balances[sender]) - value
+ensures self->balances[to] == old(self->balances[to]) + value:
     // Reduce balance
     self->balances[sender] = self->balances[sender] - value
+    self->balances[to] = self->balances[to] + value    

@@ -7,4 +7,4 @@ version="0.1.0"
 platforms=["whiley","boogie"]
 
 [dependencies]
-
+evm="0.1.0"
