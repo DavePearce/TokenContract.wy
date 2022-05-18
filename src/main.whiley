@@ -1,8 +1,11 @@
-import uint256, address, map, EXP_160, EXP_256 from evm::types
+import uint256, MAX_UINT256 from evm::ints
+import uint160, MAX_UINT160 from evm::ints
+import address from evm::util
+import evm::map with map
 import evm::msg
 
 // Maintains the balances of all accounts.
-public map<uint256> balances = [0; EXP_160]
+public map<uint256> balances = [0; MAX_UINT160+1]
 
 // Records the total number of coins in circulation
 public uint256 total = 0
@@ -15,9 +18,9 @@ public method mint(address to, uint256 value)
 // Only the owner can mint new coins
 requires msg::sender == owner
 // Prevent overflow in target account
-requires balances[to] + value < EXP_256
+requires balances[to] + value <= MAX_UINT256
 // Prevent overflow of total
-requires total + value < EXP_256
+requires total + value <= MAX_UINT256
 // Ensures total increased as expected
 ensures total == old(total) + value
 // Ensure target balance increased
@@ -48,7 +51,7 @@ public method transfer(address to, uint256 value)
 // Ensure sufficient funds in source account
 requires balances[msg::sender] >= value
 // Prevent overflow in target account
-requires balances[to] + value < EXP_256
+requires balances[to] + value <= MAX_UINT256
 // Cannot transfer to myself!
 requires msg::sender != to
 // Ensure source balance decreased
